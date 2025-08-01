@@ -1,0 +1,41 @@
+# SECURE Dockerfile with security best practices
+FROM eclipse-temurin:17-jre-alpine
+
+# SECURE: Create non-root user
+RUN addgroup -g 1001 appgroup && \
+    adduser -D -u 1001 -G appgroup appuser
+
+# SECURE: Install only necessary packages and clean up
+RUN apk add --no-cache curl && \
+    rm -rf /var/cache/apk/*
+
+# SECURE: Remove sensitive labels
+LABEL description="Secure Spring Boot Application"
+
+# SECURE: No hardcoded credentials
+# Use environment variables or secrets management
+
+# Create application directory with proper ownership
+WORKDIR /app
+RUN chown appuser:appgroup /app
+
+# SECURE: Switch to non-root user before copying files
+USER appuser
+
+# Copy the JAR file
+COPY --chown=appuser:appgroup target/vulnerable-spring-app-1.0.0.jar app.jar
+
+# SECURE: Expose only necessary port
+EXPOSE 8080
+
+# SECURE: Use specific JVM security flags
+ENTRYPOINT ["java", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "-Dcom.sun.jndi.ldap.object.trustURLCodebase=false", \
+    "-Dcom.sun.jndi.rmi.object.trustURLCodebase=false", \
+    "-Dlog4j2.formatMsgNoLookups=true", \
+    "-jar", "/app/app.jar"]
+
+# SECURE: Proper health check without exposing internal endpoints
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/actuator/health/readiness || exit 1
