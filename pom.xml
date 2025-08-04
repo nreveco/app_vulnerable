@@ -14,11 +14,11 @@
     <name>Secure Spring Boot App</name>
     <description>Demo project with security vulnerabilities FIXED</description>
     <properties>
-        <java.version>17</java.version> <!-- FIXED: Updated Java version -->
-        <log4j.version>2.21.1</log4j.version> <!-- FIXED: Latest Log4j version -->
-        <jackson.version>2.15.3</jackson.version> <!-- FIXED: Latest Jackson version -->
-        <tomcat.version>10.1.15</tomcat.version> <!-- FIXED: Latest Tomcat version -->
-    </properties>
+             <java.version>17</java.version>
+             <log4j.version>2.13.3</log4j.version> <!-- VULNERABLE: Afectado por Log4Shell (CVE-2021-44228) -->
+             <jackson.version>2.9.10</jackson.version> <!-- VULNERABLE: CVE-2019-12384 permite deserialización remota -->
+             <tomcat.version>8.5.50</tomcat.version> <!-- VULNERABLE: Diversas fallas como CVE-2020-13943 -->
+         </properties>
 
     <dependencies>
         <!-- Spring Boot Starters -->
