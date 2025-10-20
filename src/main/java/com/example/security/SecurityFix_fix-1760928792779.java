@@ -1,0 +1,1 @@
+Replace vulnerable libraries with updated, secure versions; implement a Content Security Policy (CSP) to restrict loading of untrusted resources.
