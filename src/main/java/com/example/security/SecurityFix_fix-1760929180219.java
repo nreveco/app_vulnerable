@@ -1,0 +1,1 @@
+Replace vulnerable Log4j version with a secure one, such as version 2.15.0 or later.
